@@ -1,0 +1,121 @@
+<div style="
+  width: 220px;
+  height: 220px;
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+">
+  <!-- Top Clock -->
+  <div style="text-align: center;">
+    <div id="clock1" style="font-size: 24px; color: #ffcc00; font-weight: bold; margin-bottom: 5px;"></div>
+    <select id="timezone1" style="
+      background: #333;
+      color: #fff;
+      border: 1px solid #444;
+      padding: 5px;
+      border-radius: 4px;
+      width: 100%;
+      font-size: 11px;
+    "></select>
+  </div>
+  
+  <!-- Bottom Clock -->
+  <div style="text-align: center;">
+    <div id="clock2" style="font-size: 24px; color: #ffcc00; font-weight: bold; margin-bottom: 5px;"></div>
+    <select id="timezone2" style="
+      background: #333;
+      color: #fff;
+      border: 1px solid #444;
+      padding: 5px;
+      border-radius: 4px;
+      width: 100%;
+      font-size: 11px;
+    "></select>
+  </div>
+</div>
+
+<script>
+// Complete worldwide timezone list
+const timezones = [
+  {id: "local", name: "Local Time"},
+  {id: "Etc/GMT+12", name: "GMT-12:00 (International Date Line West)"},
+  {id: "Pacific/Midway", name: "GMT-11:00 (Midway Island)"},
+  {id: "Pacific/Honolulu", name: "GMT-10:00 (Hawaii)"},
+  {id: "America/Anchorage", name: "GMT-09:00 (Alaska)"},
+  {id: "America/Los_Angeles", name: "GMT-08:00 (Pacific Time)"},
+  {id: "America/Denver", name: "GMT-07:00 (Mountain Time)"},
+  {id: "America/Chicago", name: "GMT-06:00 (Central Time)"},
+  {id: "America/New_York", name: "GMT-05:00 (Eastern Time)"},
+  {id: "America/Halifax", name: "GMT-04:00 (Atlantic Time)"},
+  {id: "America/St_Johns", name: "GMT-03:30 (Newfoundland)"},
+  {id: "America/Sao_Paulo", name: "GMT-03:00 (São Paulo)"},
+  {id: "America/Noronha", name: "GMT-02:00 (Fernando de Noronha)"},
+  {id: "Atlantic/Cape_Verde", name: "GMT-01:00 (Cape Verde)"},
+  {id: "Europe/London", name: "GMT+00:00 (London)"},
+  {id: "Europe/Paris", name: "GMT+01:00 (Paris)"},
+  {id: "Europe/Helsinki", name: "GMT+02:00 (Helsinki)"},
+  {id: "Europe/Moscow", name: "GMT+03:00 (Moscow)"},
+  {id: "Asia/Dubai", name: "GMT+04:00 (Dubai)"},
+  {id: "Asia/Karachi", name: "GMT+05:00 (Karachi)"},
+  {id: "Asia/Dhaka", name: "GMT+06:00 (Dhaka)"},
+  {id: "Asia/Bangkok", name: "GMT+07:00 (Bangkok)"},
+  {id: "Asia/Shanghai", name: "GMT+08:00 (Beijing)"},
+  {id: "Asia/Tokyo", name: "GMT+09:00 (Tokyo)"},
+  {id: "Australia/Sydney", name: "GMT+10:00 (Sydney)"},
+  {id: "Pacific/Noumea", name: "GMT+11:00 (New Caledonia)"},
+  {id: "Pacific/Auckland", name: "GMT+12:00 (Auckland)"},
+  {id: "Pacific/Tongatapu", name: "GMT+13:00 (Tongatapu)"},
+  {id: "Pacific/Kiritimati", name: "GMT+14:00 (Kiritimati)"}
+];
+
+function populateTimezones() {
+  const select1 = document.getElementById('timezone1');
+  const select2 = document.getElementById('timezone2');
+  
+  timezones.forEach(tz => {
+    const option = document.createElement('option');
+    option.value = tz.id;
+    option.textContent = tz.name;
+    select1.appendChild(option.cloneNode(true));
+    select2.appendChild(option);
+  });
+  
+  // Set default selections
+  select1.value = "local";
+  select2.value = "Europe/London";
+}
+
+function updateClocks() {
+  const options = {
+    timeStyle: 'medium',
+    hour12: true
+  };
+  
+  // Clock 1
+  const tz1 = document.getElementById('timezone1').value;
+  const clock1 = document.getElementById('clock1');
+  clock1.textContent = tz1 === 'local' 
+    ? new Date().toLocaleTimeString('en-US', options)
+    : new Date().toLocaleTimeString('en-US', {...options, timeZone: tz1});
+  
+  // Clock 2
+  const tz2 = document.getElementById('timezone2').value;
+  const clock2 = document.getElementById('clock2');
+  clock2.textContent = tz2 === 'local' 
+    ? new Date().toLocaleTimeString('en-US', options)
+    : new Date().toLocaleTimeString('en-US', {...options, timeZone: tz2});
+}
+
+// Initialize
+populateTimezones();
+updateClocks();
+setInterval(updateClocks, 1000);
+
+// Update when timezone changes
+document.getElementById('timezone1').addEventListener('change', updateClocks);
+document.getElementById('timezone2').addEventListener('change', updateClocks);
+</script>
