@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notion Clock</title>
+    <style>
+        body {
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial;
+            color: #ffcc00;
+        }
+        .clock {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        select {
+            background: #333;
+            color: white;
+            border: 1px solid #444;
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Clock -->
+    <div>
+        <div id="clock1" class="clock">--:--:--</div>
+        <select id="timezone1">
+            <option value="local">Local Time</option>
+            <option value="America/New_York">New York (EST)</option>
+            <option value="Europe/London">London (GMT)</option>
+        </select>
+    </div>
+
+    <!-- Bottom Clock -->
+    <div>
+        <div id="clock2" class="clock">--:--:--</div>
+        <select id="timezone2">
+            <option value="Asia/Tokyo">Tokyo (JST)</option>
+            <option value="America/Los_Angeles">Los Angeles (PST)</option>
+        </select>
+    </div>
+
+    <script>
+        function updateClock(clockId, tzId) {
+            const options = {
+                timeStyle: 'medium',
+                hour12: false,
+                timeZone: document.getElementById(tzId).value === 'local' 
+                    ? undefined 
+                    : document.getElementById(tzId).value
+            };
+            document.getElementById(clockId).textContent = 
+                new Date().toLocaleTimeString('en-US', options);
+        }
+
+        setInterval(() => {
+            updateClock('clock1', 'timezone1');
+            updateClock('clock2', 'timezone2');
+        }, 1000);
+
+        document.getElementById('timezone1').addEventListener('change', () => updateClock('clock1', 'timezone1'));
+        document.getElementById('timezone2').addEventListener('change', () => updateClock('clock2', 'timezone2'));
+    </script>
+</body>
+</html>
